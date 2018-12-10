@@ -47,16 +47,24 @@ password为密码
 配置自启动
 编辑shadowsocks 服务的启动脚本文件，内容如下：
 
-[root@server ~]# vim /etc/systemd/system/shadowsocks.service
 [Unit]
-Description=Shadowsocks
-
+Description=Shadowsocks service
+After=network.target
+ 
 [Service]
-TimeoutStartSec=0
+Type=simple
+User=root
 ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json
-
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID 
+PrivateTmp=true
+KillMode=process
+Restart=on-failure
+RestartSec=5s
+ 
 [Install]
 WantedBy=multi-user.target
+
 执行以下命令启动 shadowsocks 服务：
 
 [root@server ~]# systemctl enable shadowsocks
