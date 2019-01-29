@@ -1,7 +1,5 @@
 https://opencv-java-tutorials.readthedocs.io/en/latest/ opencv_java
 
-
-hello ssh
 https://masuit.com/118
-
+--
 https://masuit.com/misc/5
