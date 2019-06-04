@@ -1,4 +1,4 @@
-https://opencv-java-tutorials.readthedocs.io/en/latest/ opencv_java
+﻿https://opencv-java-tutorials.readthedocs.io/en/latest/ opencv_java
 
 https://masuit.com/118
 --
@@ -6,3 +6,8 @@ https://masuit.com/misc/5
 
 --设计模式
 http://www.runoob.com/design-pattern/adapter-pattern.html
+
+
+--
+IP：
+PORT:
