@@ -254,3 +254,18 @@ yum install net-tools -y && wget --no-check-certificate -O appex.sh https://raw.
 
 //安装疯狂版
 wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
+
+#卸载
+chattr -i /serverspeeder/etc/apx* && /serverspeeder/bin/serverSpeeder.sh uninstall -f
+
+
+#测速
+wget --no-check-certificate -O speedtest https://raw.github.com/sivel/speedtest-cli/master/speedtest.py
+ 
+chmod +x speedtest
+
+https://www.speedtest.net/speedtest-servers-static.php
+
+./speedtest --server 4515
+
+
