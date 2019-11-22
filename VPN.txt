@@ -94,7 +94,7 @@ echo "Installing Shadowsocks..."
 
 CONFIG_FILE=/etc/shadowsocks.json
 SERVICE_FILE=/etc/systemd/system/shadowsocks.service
-SS_IP=104.238.181.240
+SS_IP=149.28.210.250
 SS_PASSWORD=liyi18870249490
 SS_PORT=8181
 SS_METHOD=aes-256-cfb
@@ -246,9 +246,11 @@ tcp_bbr                20480  2
 # ifconfig | grep 'inet addr'
 
 
-#锐速
+#锐速--换内核
 wget --no-check-certificate -O rskernel.sh https://raw.githubusercontent.com/uxh/shadowsocks_bash/master/rskernel.sh && bash rskernel.sh
 
 
 yum install net-tools -y && wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && bash appex.sh install
 
+//安装疯狂版
+wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
