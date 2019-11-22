@@ -92,15 +92,11 @@ success
 
 echo "Installing Shadowsocks..."
 
-random-string()
-{
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
-}
-
 CONFIG_FILE=/etc/shadowsocks.json
 SERVICE_FILE=/etc/systemd/system/shadowsocks.service
-SS_PASSWORD=$(random-string 32)
-SS_PORT=8388
+SS_IP=104.238.181.240
+SS_PASSWORD=liyi18870249490
+SS_PORT=8181
 SS_METHOD=aes-256-cfb
 SS_IP=`ip route get 1 | awk '{print $NF;exit}'`
 GET_PIP_FILE=/tmp/get-pip.py
@@ -116,7 +112,7 @@ pip install shadowsocks
 # create shadowsocls config
 cat <<EOF | sudo tee ${CONFIG_FILE}
 {
-  "server": "0.0.0.0",
+  "server": "${SS_IP}",
   "server_port": ${SS_PORT},
   "password": "${SS_PASSWORD}",
   "method": "${SS_METHOD}"
@@ -126,12 +122,20 @@ EOF
 # create service
 cat <<EOF | sudo tee ${SERVICE_FILE}
 [Unit]
-Description=Shadowsocks
-
+Description=Shadowsocks service
+After=network.target
+ 
 [Service]
-TimeoutStartSec=0
-ExecStart=/usr/bin/ssserver -c ${CONFIG_FILE}
-
+Type=simple
+User=root
+ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID 
+PrivateTmp=true
+KillMode=process
+Restart=on-failure
+RestartSec=5s
+ 
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -144,6 +148,11 @@ systemctl start shadowsocks
 sleep 5
 systemctl status shadowsocks -l
 
+echo "==========firewall 8181============"
+firewall-cmd --zone=public --add-port=8181/tcp --permanent
+echo "==========firewall reload============"
+firewall-cmd --reload
+
 echo "================================"
 echo ""
 echo "Congratulations! Shadowsocks has been installed on your system."
@@ -155,6 +164,19 @@ echo "password:    ${SS_PASSWORD}"
 echo "method:      ${SS_METHOD}"
 echo "--------------------------------"
 
+echo "--------yum update --------"
+# yum update
+
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+echo "------yum-----"
+yum --enablerepo=elrepo-kernel install kernel-ml -y
+
+egrep ^menuentry /etc/grub2.cfg | cut -f 2 -d \'
+grub2-set-default 0
+
+echo "------reboot------"
+reboot
 
 
 bbr
@@ -211,3 +233,22 @@ net.ipv4.tcp_available_congestion_control = bbr cubic reno
 tcp_bbr                20480  2 
 [root@vultr ~]# 
 输出内容如上，则表示bbr已经成功开启。
+
+
+# yum install -y pptp pptp-setup ppp
+
+# pptpsetup --create vpn520 --server 45.32.37.162 --username root --password 270061114
+
+# cp /usr/share/doc/ppp-2.4.5/scripts/pon /usr/sbin/
+# cp /usr/share/doc/ppp-2.4.5/scripts/poff /usr/sbin/
+# chmod u+x /usr/sbin/pon /usr/sbin/poff
+# pon vpn520
+# ifconfig | grep 'inet addr'
+
+
+#锐速
+wget --no-check-certificate -O rskernel.sh https://raw.githubusercontent.com/uxh/shadowsocks_bash/master/rskernel.sh && bash rskernel.sh
+
+
+yum install net-tools -y && wget --no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && bash appex.sh install
+
