@@ -9,5 +9,3 @@ http://www.runoob.com/design-pattern/adapter-pattern.html
 
 
 --
-IP：45.76.189.22
-PORT: 8181
